@@ -1,5 +1,5 @@
 import requests
-
+from send_email import send_email
 
 # API Key
 api_key = "e0d095606cf24f28bed115e066f07017 "
@@ -11,8 +11,16 @@ request = requests.get(url)
 # Get the Dictionary of the Data
 content = request.json()
 
+# Email Message Generation
+message = ""
+
 # Access the article titles and the description
 articles = content['articles']
 for article in articles:
-    print(article['title'])
-    print(article["description"])
+    try:
+        message += article['title'] + "\n"
+        message += article["description"] + "\n\n"
+    except TypeError:
+        continue
+# Encoded and decoded because the contents of the mail contains special characters
+send_email("destroyer02042005@gmail.com", message.encode("ascii", errors="ignore").decode())
