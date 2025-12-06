@@ -1,9 +1,11 @@
 import requests
 from send_email import send_email
 
+topic = "tesla"
+
 # API Key
 api_key = "e0d095606cf24f28bed115e066f07017 "
-url = "https://newsapi.org/v2/everything?q=tesla&from=2025-11-06&sortBy=publishedAt&apiKey=e0d095606cf24f28bed115e066f07017"
+url = f"https://newsapi.org/v2/everything?q={topic}&from=2025-11-06&sortBy=publishedAt&apiKey=e0d095606cf24f28bed115e066f07017&language=en"
 
 # Make Requests
 request = requests.get(url)
@@ -15,11 +17,13 @@ content = request.json()
 message = ""
 
 # Access the article titles and the description
-articles = content['articles']
+articles = content['articles'][:20]
 for article in articles:
     try:
         message += article['title'] + "\n"
-        message += article["description"] + "\n\n"
+        message += article["description"] + "\n"
+        message += article["url"] + "\n"
+
     except TypeError:
         continue
 # Encoded and decoded because the contents of the mail contains special characters
